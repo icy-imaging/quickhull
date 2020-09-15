@@ -64,7 +64,7 @@ import javax.vecmath.Vector3d;
  * {@link #getVertices(double[]) getVertex} methods which pass point information using an array of
  * doubles.
  * 
- * <h3><a name=distTol>Robustness</h3>
+ * <h3><a name=distTol>Robustness </a></h3>
  * Because this algorithm uses floating point arithmetic, it is potentially vulnerable to errors
  * arising from numerical imprecision. We address this problem in the same way as <a
  * href=http://www.qhull.org>qhull</a>, by merging faces whose edges are not clearly convex. A face

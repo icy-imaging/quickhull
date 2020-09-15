@@ -6,8 +6,8 @@ import icy.plugin.interface_.PluginLibrary;
 /**
  * Main class of the QuickHull library for Icy
  * 
- * @see {@link QuickHull2D}
- * @see {@link QuickHull3D}
+ * {@link QuickHull2D}
+ * {@link QuickHull3D}
  * 
  * @author Alexandre Dufour
  *
