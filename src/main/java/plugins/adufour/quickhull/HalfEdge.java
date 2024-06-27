@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2023. Institut Pasteur.
+ * Copyright (c) 2010-2024. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,6 +18,9 @@
 
 package plugins.adufour.quickhull;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import javax.vecmath.Vector3d;
 
 /**
@@ -25,7 +28,7 @@ import javax.vecmath.Vector3d;
  *
  * @author John E. Lloyd, Fall 2004
  */
-class HalfEdge {
+public class HalfEdge {
     /**
      * The vertex associated with the head of this half-edge.
      */
@@ -58,11 +61,13 @@ class HalfEdge {
      * @param v head vertex
      * @param f left-hand triangular face
      */
+    @Contract(pure = true)
     public HalfEdge(final Vertex v, final Face f) {
         vertex = v;
         face = f;
     }
 
+    @Contract(pure = true)
     public HalfEdge() {
     }
 
@@ -125,7 +130,7 @@ class HalfEdge {
      *
      * @param edge opposite half-edge
      */
-    public void setOpposite(final HalfEdge edge) {
+    public void setOpposite(final @NotNull HalfEdge edge) {
         opposite = edge;
         edge.opposite = this;
     }

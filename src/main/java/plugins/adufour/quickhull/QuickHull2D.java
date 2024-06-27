@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2023. Institut Pasteur.
+ * Copyright (c) 2010-2024. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,21 +18,24 @@
 
 package plugins.adufour.quickhull;
 
-import icy.plugin.abstract_.Plugin;
+import org.bioimageanalysis.icy.extension.plugin.abstract_.Plugin;
+import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginName;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+@IcyPluginName("QuickHull 2D")
 public class QuickHull2D extends Plugin {
-    public static List<Point2D> computeConvexEnvelope(final List<Point2D> points) {
+    public static @NotNull List<Point2D> computeConvexEnvelope(final @NotNull List<Point2D> points) {
         final ArrayList<Point2D> envelope = new ArrayList<>();
 
         // find two points: right (bottom) and left (top)
 
-        Point2D l = points.get(0);
-        Point2D r = points.get(0);
+        Point2D l = points.getFirst();
+        Point2D r = points.getFirst();
 
         for (int i = 1; i < points.size(); i++) {
             final Point2D p = points.get(i);
@@ -69,8 +72,8 @@ public class QuickHull2D extends Plugin {
         return envelope;
     }
 
-    private static void quickhull(final ArrayList<Point2D> envelope, final Point2D a, final Point2D b, final ArrayList<Point2D> neighbors) {
-        if (neighbors.size() == 0) return;
+    private static void quickhull(final ArrayList<Point2D> envelope, final Point2D a, final Point2D b, final @NotNull ArrayList<Point2D> neighbors) {
+        if (neighbors.isEmpty()) return;
 
         final Point2D c = farthestpoint(a, b, neighbors);
 
@@ -95,7 +98,7 @@ public class QuickHull2D extends Plugin {
         quickhull(envelope, c, b, al2);
     }
 
-    private static Point2D farthestpoint(final Point2D a, final Point2D b, final ArrayList<Point2D> points) {
+    private static Point2D farthestpoint(final Point2D a, final Point2D b, final @NotNull ArrayList<Point2D> points) {
         double maxD = -1;
         Point2D maxP = null;
 

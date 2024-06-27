@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2023. Institut Pasteur.
+ * Copyright (c) 2010-2024. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -16,6 +16,10 @@
  * along with Icy. If not, see <https://www.gnu.org/licenses/>.
  */
 package plugins.adufour.quickhull;
+
+import org.bioimageanalysis.icy.system.logging.IcyLogger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -224,7 +228,7 @@ public class QuickHull3D {
         return explicitTolerance;
     }
 
-    private void addPointToFace(final Vertex vtx, final Face face) {
+    private void addPointToFace(final @NotNull Vertex vtx, final @NotNull Face face) {
         vtx.face = face;
 
         if (face.outside == null) {
@@ -236,7 +240,7 @@ public class QuickHull3D {
         face.outside = vtx;
     }
 
-    private void removePointFromFace(final Vertex vtx, final Face face) {
+    private void removePointFromFace(final Vertex vtx, final @NotNull Face face) {
         if (vtx == face.outside) {
             if (vtx.next != null && vtx.next.face == face) {
                 face.outside = vtx.next;
@@ -248,7 +252,7 @@ public class QuickHull3D {
         claimed.delete(vtx);
     }
 
-    private Vertex removeAllPointsFromFace(final Face face) {
+    private @Nullable Vertex removeAllPointsFromFace(final @NotNull Face face) {
         if (face.outside != null) {
             Vertex end = face.outside;
             while (end.next != null && end.next.face == face) {
@@ -293,7 +297,7 @@ public class QuickHull3D {
         build(points, points.length);
     }
 
-    private HalfEdge findHalfEdge(final Vertex tail, final Vertex head) {
+    private @Nullable HalfEdge findHalfEdge(final Vertex tail, final Vertex head) {
         // brute force ... OK, since setHull is not used much
         for (final Face face : faces) {
             final HalfEdge he = face.findEdge(tail, head);
@@ -322,7 +326,7 @@ public class QuickHull3D {
         }
     }
 
-    private void printQhullErrors(final Process proc) throws IOException {
+    private void printQhullErrors(final @NotNull Process proc) throws IOException {
         boolean wrote = false;
         final InputStream es = proc.getErrorStream();
         while (es.available() > 0) {
@@ -340,7 +344,7 @@ public class QuickHull3D {
             commandStr += " -Qt";
         }
         try {
-            final Process proc = Runtime.getRuntime().exec(commandStr);
+            final Process proc = Runtime.getRuntime().exec(commandStr); // FIXME change command from String to String[]
             final PrintStream ps = new PrintStream(proc.getOutputStream());
             final StreamTokenizer stok = new StreamTokenizer(new InputStreamReader(proc.getInputStream()));
 
@@ -374,7 +378,7 @@ public class QuickHull3D {
                         System.out.println("Expecting face index");
                         System.exit(1);
                     }
-                    indexList.add(0, (int) stok.nval);
+                    indexList.addFirst((int) stok.nval);
                 }
                 faceIndices[i] = new int[indexList.size()];
                 int k = 0;
@@ -385,8 +389,9 @@ public class QuickHull3D {
             setHull(coords, nump, faceIndices, numf);
         }
         catch (final Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+            IcyLogger.fatal(this.getClass(), e, e.getLocalizedMessage());
+            //System.exit(1);
+            throw new RuntimeException(e);
         }
     }
 
@@ -878,7 +883,7 @@ public class QuickHull3D {
         }
     }
 
-    private void getFaceIndices(final int[] indices, final Face face, final int flags) {
+    private void getFaceIndices(final int[] indices, final @NotNull Face face, final int flags) {
         final boolean ccw = ((flags & CLOCKWISE) == 0);
         final boolean indexedFromOne = ((flags & INDEXED_FROM_ONE) != 0);
         final boolean pointRelative = ((flags & POINT_RELATIVE) != 0);
@@ -956,11 +961,11 @@ public class QuickHull3D {
     private static final int NONCONVEX_WRT_LARGER_FACE = 1;
     private static final int NONCONVEX = 2;
 
-    protected double oppFaceDistance(final HalfEdge he) {
+    protected double oppFaceDistance(final @NotNull HalfEdge he) {
         return he.face.distanceToPlane(he.opposite.face.getCentroid());
     }
 
-    private boolean doAdjacentMerge(final Face face, final int mergeType) {
+    private boolean doAdjacentMerge(final @NotNull Face face, final int mergeType) {
         HalfEdge hedge = face.he0;
 
         boolean convex = true;
@@ -1050,14 +1055,14 @@ public class QuickHull3D {
         } while (edge != edge0);
     }
 
-    private HalfEdge addAdjoiningFace(final Vertex eyeVtx, final HalfEdge he) {
+    private HalfEdge addAdjoiningFace(final Vertex eyeVtx, final @NotNull HalfEdge he) {
         final Face face = Face.createTriangle(eyeVtx, he.tail(), he.head());
         faces.add(face);
         face.getEdge(-1).setOpposite(he.getOpposite());
         return face.getEdge(0);
     }
 
-    protected void addNewFaces(final FaceList newFaces, final Vertex eyeVtx, final Vector<HalfEdge> horizon) {
+    protected void addNewFaces(final @NotNull FaceList newFaces, final Vertex eyeVtx, final @NotNull Vector<HalfEdge> horizon) {
         newFaces.clear();
 
         HalfEdge hedgeSidePrev = null;
@@ -1153,7 +1158,7 @@ public class QuickHull3D {
         }
     }
 
-    private void markFaceVertices(final Face face, final int mark) {
+    private void markFaceVertices(final @NotNull Face face, final int mark) {
         final HalfEdge he0 = face.getFirstEdge();
         HalfEdge he = he0;
         do {
@@ -1189,7 +1194,7 @@ public class QuickHull3D {
         }
     }
 
-    protected boolean checkFaceConvexity(final Face face, final double tol, final PrintStream ps) {
+    protected boolean checkFaceConvexity(final @NotNull Face face, final double tol, final PrintStream ps) {
         double dist;
         HalfEdge he = face.he0;
         do {

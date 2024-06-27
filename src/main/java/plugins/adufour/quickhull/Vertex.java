@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2023. Institut Pasteur.
+ * Copyright (c) 2010-2024. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@
 
 package plugins.adufour.quickhull;
 
+import org.jetbrains.annotations.Contract;
+
 import javax.vecmath.Vector3d;
 
 /**
@@ -26,7 +28,7 @@ import javax.vecmath.Vector3d;
  *
  * @author John E. Lloyd, Fall 2004
  */
-class Vertex {
+public class Vertex {
     /**
      * Spatial point associated with this vertex.
      */
@@ -55,6 +57,7 @@ class Vertex {
     /**
      * Constructs a vertex and sets its coordinates to 0.
      */
+    @Contract(pure = true)
     public Vertex() {
         pnt = new Vector3d();
     }
@@ -63,6 +66,7 @@ class Vertex {
      * Constructs a vertex with the specified coordinates
      * and index.
      */
+    @Contract(pure = true)
     public Vertex(final double x, final double y, final double z, final int idx) {
         pnt = new Vector3d(x, y, z);
         index = idx;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2023. Institut Pasteur.
+ * Copyright (c) 2010-2024. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,10 +18,12 @@
 
 package plugins.adufour.quickhull;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Maintains a double-linked list of vertices for use by QuickHull3D
  */
-class VertexList {
+public class VertexList {
     private Vertex head;
     private Vertex tail;
 
@@ -67,7 +69,7 @@ class VertexList {
     /**
      * Deletes a vertex from this list.
      */
-    public void delete(final Vertex vtx) {
+    public void delete(final @NotNull Vertex vtx) {
         if (vtx.prev == null) {
             head = vtx.next;
         }
@@ -85,7 +87,7 @@ class VertexList {
     /**
      * Deletes a chain of vertices from this list.
      */
-    public void delete(final Vertex vtx1, final Vertex vtx2) {
+    public void delete(final @NotNull Vertex vtx1, final Vertex vtx2) {
         if (vtx1.prev == null) {
             head = vtx2.next;
         }
@@ -103,7 +105,7 @@ class VertexList {
     /**
      * Inserts a vertex into this list before another specificed vertex.
      */
-    public void insertBefore(final Vertex vtx, final Vertex next) {
+    public void insertBefore(final @NotNull Vertex vtx, final @NotNull Vertex next) {
         vtx.prev = next.prev;
         if (next.prev == null) {
             head = vtx;

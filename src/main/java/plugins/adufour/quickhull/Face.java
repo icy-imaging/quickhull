@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2023. Institut Pasteur.
+ * Copyright (c) 2010-2024. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@
 
 package plugins.adufour.quickhull;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.vecmath.Vector3d;
 
 /**
@@ -30,7 +32,7 @@ import javax.vecmath.Vector3d;
  *
  * @author John E. Lloyd, Fall 2004
  */
-class Face {
+public class Face {
     HalfEdge he0;
     private final Vector3d normal;
     double area;
@@ -49,7 +51,7 @@ class Face {
 
     Vertex outside;
 
-    public void computeCentroid(final Vector3d centroid) {
+    public void computeCentroid(final @NotNull Vector3d centroid) {
         centroid.set(0, 0, 0);
         HalfEdge he = he0;
         do {
@@ -95,7 +97,7 @@ class Face {
         }
     }
 
-    public void computeNormal(final Vector3d normal) {
+    public void computeNormal(final @NotNull Vector3d normal) {
         HalfEdge he1 = he0.next;
         HalfEdge he2 = he1.next;
 
@@ -153,7 +155,7 @@ class Face {
         planeOffset = normal.dot(centroid);
     }
 
-    public static Face createTriangle(final Vertex v0, final Vertex v1, final Vertex v2) {
+    public static @NotNull Face createTriangle(final Vertex v0, final Vertex v1, final Vertex v2) {
         return createTriangle(v0, v1, v2, 0);
     }
 
@@ -164,7 +166,7 @@ class Face {
      * @param v1 second vertex
      * @param v2 third vertex
      */
-    public static Face createTriangle(final Vertex v0, final Vertex v1, final Vertex v2, final double minArea) {
+    public static @NotNull Face createTriangle(final Vertex v0, final Vertex v1, final Vertex v2, final double minArea) {
         final Face face = new Face();
         final HalfEdge he0 = new HalfEdge(v0, face);
         final HalfEdge he1 = new HalfEdge(v1, face);
@@ -184,7 +186,7 @@ class Face {
         return face;
     }
 
-    public static Face create(final Vertex[] vtxArray, final int[] indices) {
+    public static @NotNull Face create(final Vertex[] vtxArray, final int @NotNull [] indices) {
         final Face face = new Face();
         HalfEdge hePrev = null;
         for (final int j : indices) {
@@ -261,7 +263,7 @@ class Face {
      * @param p the point
      * @return distance from the point to the plane
      */
-    public double distanceToPlane(final Vector3d p) {
+    public double distanceToPlane(final @NotNull Vector3d p) {
         return normal.x * p.x + normal.y * p.y + normal.z * p.z - planeOffset;
     }
 
@@ -297,7 +299,7 @@ class Face {
         return s.toString();
     }
 
-    public void getVertexIndices(final int[] idxs) {
+    public void getVertexIndices(final int @NotNull [] idxs) {
         HalfEdge he = he0;
         int i = 0;
         do {
@@ -306,7 +308,7 @@ class Face {
         } while (he != he0);
     }
 
-    private Face connectHalfEdges(final HalfEdge hedgePrev, final HalfEdge hedge) {
+    private Face connectHalfEdges(final @NotNull HalfEdge hedgePrev, final @NotNull HalfEdge hedge) {
         Face discardedFace = null;
 
         if (hedgePrev.oppositeFace() == hedge.oppositeFace()) { // then there is a redundant edge that we can get rid off
@@ -389,7 +391,7 @@ class Face {
 
     }
 
-    public int mergeAdjacentFace(final HalfEdge hedgeAdj, final Face[] discarded) {
+    public int mergeAdjacentFace(final @NotNull HalfEdge hedgeAdj, final Face @NotNull [] discarded) {
         final Face oppFace = hedgeAdj.oppositeFace();
         int numDiscarded = 0;
 
@@ -481,6 +483,5 @@ class Face {
         for (Face face = face0; face != null; face = face.next) {
             face.checkConsistency();
         }
-
     }
 }
