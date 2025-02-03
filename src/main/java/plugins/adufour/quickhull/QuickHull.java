@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2024. Institut Pasteur.
+ * Copyright (c) 2010-2025. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -21,7 +21,6 @@ package plugins.adufour.quickhull;
 import org.bioimageanalysis.icy.extension.plugin.abstract_.Plugin;
 import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginIcon;
 import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginName;
-import org.bioimageanalysis.icy.extension.plugin.interface_.PluginLibrary;
 
 /**
  * Main class of the QuickHull library for Icy
@@ -32,7 +31,7 @@ import org.bioimageanalysis.icy.extension.plugin.interface_.PluginLibrary;
  * @author Alexandre Dufour
  */
 @IcyPluginName("QuickHull")
-@IcyPluginIcon(path = "/quickhull.png")
-public class QuickHull extends Plugin implements PluginLibrary {
-
+@IcyPluginIcon(path = "/plugins/adufour/quickhull/quickhull.png")
+public class QuickHull extends Plugin {
+    //
 }

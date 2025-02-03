@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2024. Institut Pasteur.
+ * Copyright (c) 2010-2025. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Icy. If not, see <https://www.gnu.org/licenses/>.
  */
+
 package plugins.adufour.quickhull;
 
 import org.bioimageanalysis.icy.system.logging.IcyLogger;
@@ -339,12 +340,14 @@ public class QuickHull3D {
     }
 
     protected void setFromQhull(final double[] coords, final int nump, final boolean triangulate) {
-        String commandStr = "./qhull i";
-        if (triangulate) {
-            commandStr += " -Qt";
-        }
+        final String[] commandStr;
+        if (triangulate)
+            commandStr = new String[]{"./qhull", "i", "-Qt"};
+        else
+            commandStr = new String[]{"./qhull", "i"};
+
         try {
-            final Process proc = Runtime.getRuntime().exec(commandStr); // FIXME change command from String to String[]
+            final Process proc = Runtime.getRuntime().exec(commandStr);
             final PrintStream ps = new PrintStream(proc.getOutputStream());
             final StreamTokenizer stok = new StreamTokenizer(new InputStreamReader(proc.getInputStream()));
 
@@ -365,8 +368,8 @@ public class QuickHull3D {
                 stok.nextToken();
             }
             if (stok.ttype != StreamTokenizer.TT_NUMBER) {
-                System.out.println("Expecting number of faces");
-                System.exit(1);
+                IcyLogger.fatal(this.getClass(), "Expecting number of faces");
+                System.exit(1); // TODO replace with runtime exception ?
             }
             final int numf = (int) stok.nval;
             stok.nextToken(); // clear EOL
@@ -375,8 +378,8 @@ public class QuickHull3D {
                 indexList.clear();
                 while (stok.nextToken() != StreamTokenizer.TT_EOL) {
                     if (stok.ttype != StreamTokenizer.TT_NUMBER) {
-                        System.out.println("Expecting face index");
-                        System.exit(1);
+                        IcyLogger.fatal(this.getClass(), "Expecting face index");
+                        System.exit(1); // TODO replace with runtime exception ?
                     }
                     indexList.addFirst((int) stok.nval);
                 }
@@ -655,11 +658,19 @@ public class QuickHull3D {
         }
 
         if (debug) {
-            System.out.println("initial vertices:");
+            IcyLogger.debug(
+                    this.getClass(),
+                    "initial vertices:",
+                    vtx[0].index + ": " + vtx[0].pnt,
+                    vtx[1].index + ": " + vtx[1].pnt,
+                    vtx[2].index + ": " + vtx[2].pnt,
+                    vtx[3].index + ": " + vtx[3].pnt
+            );
+            /*System.out.println("initial vertices:");
             System.out.println(vtx[0].index + ": " + vtx[0].pnt);
             System.out.println(vtx[1].index + ": " + vtx[1].pnt);
             System.out.println(vtx[2].index + ": " + vtx[2].pnt);
-            System.out.println(vtx[3].index + ": " + vtx[3].pnt);
+            System.out.println(vtx[3].index + ": " + vtx[3].pnt);*/
         }
 
         final Face[] tris = new Face[4];
@@ -925,12 +936,12 @@ public class QuickHull3D {
             if (maxFace != null) {
                 addPointToFace(vtx, maxFace);
                 if (debug && vtx.index == findIndex) {
-                    System.out.println(findIndex + " CLAIMED BY " + maxFace.getVertexString());
+                    IcyLogger.debug(this.getClass(), findIndex + " CLAIMED BY " + maxFace.getVertexString());
                 }
             }
             else {
                 if (debug && vtx.index == findIndex) {
-                    System.out.println(findIndex + " DISCARDED");
+                    IcyLogger.debug(this.getClass(), findIndex + " DISCARDED");
                 }
             }
         }
@@ -1003,7 +1014,7 @@ public class QuickHull3D {
 
             if (merge) {
                 if (debug) {
-                    System.out.println("  merging " + face.getVertexString() + "  and  " + oppFace.getVertexString());
+                    IcyLogger.debug(this.getClass(), "  merging " + face.getVertexString() + "  and  " + oppFace.getVertexString());
                 }
 
                 final int numd = face.mergeAdjacentFace(hedge, discardedFaces);
@@ -1011,7 +1022,7 @@ public class QuickHull3D {
                     deleteFacePoints(discardedFaces[i], face);
                 }
                 if (debug) {
-                    System.out.println("  result: " + face.getVertexString());
+                    IcyLogger.debug(this.getClass(), "  result: " + face.getVertexString());
                 }
                 return true;
             }
@@ -1028,7 +1039,7 @@ public class QuickHull3D {
         deleteFacePoints(face, null);
         face.mark = Face.DELETED;
         if (debug) {
-            System.out.println("  visiting face " + face.getVertexString());
+            IcyLogger.debug(this.getClass(), "  visiting face " + face.getVertexString());
         }
         HalfEdge edge;
         if (edge0 == null) {
@@ -1047,7 +1058,7 @@ public class QuickHull3D {
                 else {
                     horizon.add(edge);
                     if (debug) {
-                        System.out.println("  adding horizon edge " + edge.getVertexString());
+                        IcyLogger.debug(this.getClass(), "  adding horizon edge " + edge.getVertexString());
                     }
                 }
             }
@@ -1071,7 +1082,7 @@ public class QuickHull3D {
         for (final HalfEdge horizonHe : horizon) {
             final HalfEdge hedgeSide = addAdjoiningFace(eyeVtx, horizonHe);
             if (debug) {
-                System.out.println("new face: " + hedgeSide.face.getVertexString());
+                IcyLogger.debug(this.getClass(), "new face: " + hedgeSide.face.getVertexString());
             }
             if (hedgeSidePrev != null) {
                 hedgeSide.next.setOpposite(hedgeSidePrev);
@@ -1105,13 +1116,14 @@ public class QuickHull3D {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     protected void addPointToHull(final Vertex eyeVtx) {
         horizon.clear();
         unclaimed.clear();
 
         if (debug) {
-            System.out.println("Adding point: " + eyeVtx.index);
-            System.out.println(" which is " + eyeVtx.face.distanceToPlane(eyeVtx.pnt) + " above face " + eyeVtx.face.getVertexString());
+            IcyLogger.debug(this.getClass(), "Adding point: " + eyeVtx.index);
+            IcyLogger.debug(this.getClass(), " which is " + eyeVtx.face.distanceToPlane(eyeVtx.pnt) + " above face " + eyeVtx.face.getVertexString());
         }
         removePointFromFace(eyeVtx, eyeVtx.face);
         calculateHorizon(eyeVtx.pnt, null, eyeVtx.face, horizon);
@@ -1149,12 +1161,12 @@ public class QuickHull3D {
             addPointToHull(eyeVtx);
             cnt++;
             if (debug) {
-                System.out.println("iteration " + cnt + " done");
+                IcyLogger.debug(this.getClass(), "iteration " + cnt + " done");
             }
         }
         reindexFacesAndVertices();
         if (debug) {
-            System.out.println("hull done");
+            IcyLogger.debug(this.getClass(), "hull done");
         }
     }
 

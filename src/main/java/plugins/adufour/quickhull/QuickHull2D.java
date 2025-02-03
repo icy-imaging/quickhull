@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2024. Institut Pasteur.
+ * Copyright (c) 2010-2025. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 package plugins.adufour.quickhull;
 
 import org.bioimageanalysis.icy.extension.plugin.abstract_.Plugin;
+import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginIcon;
 import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginName;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @IcyPluginName("QuickHull 2D")
+@IcyPluginIcon(path = "/plugins/adufour/quickhull/quickhull.png")
 public class QuickHull2D extends Plugin {
     public static @NotNull List<Point2D> computeConvexEnvelope(final @NotNull List<Point2D> points) {
         final ArrayList<Point2D> envelope = new ArrayList<>();

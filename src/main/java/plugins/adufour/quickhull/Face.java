@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2024. Institut Pasteur.
+ * Copyright (c) 2010-2025. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 package plugins.adufour.quickhull;
 
+import org.bioimageanalysis.icy.system.logging.IcyLogger;
 import org.jetbrains.annotations.NotNull;
 
 import javax.vecmath.Vector3d;
@@ -65,7 +66,7 @@ public class Face {
         computeNormal(normal);
 
         if (area < minArea) {
-            System.out.println("area=" + area);
+            IcyLogger.debug(this.getClass(), "area=" + area);
             // make the normal more robust by removing
             // components parallel to the longest edge
 
@@ -288,7 +289,7 @@ public class Face {
         final StringBuilder s = new StringBuilder();
         HalfEdge he = he0;
         do {
-            if (s.length() == 0) {
+            if (s.isEmpty()) {
                 s.append(he.head().index);
             }
             else {
