@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2025. Institut Pasteur.
+ * Copyright (c) 2010-2026. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -18,9 +18,6 @@
 
 package plugins.adufour.quickhull;
 
-import org.bioimageanalysis.icy.extension.plugin.abstract_.Plugin;
-import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginIcon;
-import org.bioimageanalysis.icy.extension.plugin.annotation_.IcyPluginName;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.geom.Line2D;
@@ -28,16 +25,14 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-@IcyPluginName("QuickHull 2D")
-@IcyPluginIcon(path = "/plugins/adufour/quickhull/quickhull.png")
-public class QuickHull2D extends Plugin {
+public class QuickHull2D {
     public static @NotNull List<Point2D> computeConvexEnvelope(final @NotNull List<Point2D> points) {
         final ArrayList<Point2D> envelope = new ArrayList<>();
 
         // find two points: right (bottom) and left (top)
 
-        Point2D l = points.getFirst();
-        Point2D r = points.getFirst();
+        Point2D l = points.get(0);
+        Point2D r = points.get(0);
 
         for (int i = 1; i < points.size(); i++) {
             final Point2D p = points.get(i);

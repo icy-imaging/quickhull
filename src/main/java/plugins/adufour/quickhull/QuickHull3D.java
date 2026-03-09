@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2025. Institut Pasteur.
+ * Copyright (c) 2010-2026. Institut Pasteur.
  *
  * This file is part of Icy.
  * Icy is free software: you can redistribute it and/or modify
@@ -381,7 +381,7 @@ public class QuickHull3D {
                         IcyLogger.fatal(this.getClass(), "Expecting face index");
                         System.exit(1); // TODO replace with runtime exception ?
                     }
-                    indexList.addFirst((int) stok.nval);
+                    indexList.add(0, (int) stok.nval);
                 }
                 faceIndices[i] = new int[indexList.size()];
                 int k = 0;
