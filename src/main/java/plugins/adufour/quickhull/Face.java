@@ -18,7 +18,7 @@
 
 package plugins.adufour.quickhull;
 
-import org.bioimageanalysis.icy.system.logging.IcyLogger;
+import fr.icy.system.logging.IcyLogger;
 import org.jetbrains.annotations.NotNull;
 
 import javax.vecmath.Vector3d;
