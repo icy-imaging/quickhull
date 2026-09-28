@@ -18,10 +18,11 @@
 
 package plugins.adufour.quickhull;
 
-import fr.icy.system.logging.IcyLogger;
+import fr.icy.shared.logging.CustomLevel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.vecmath.Vector3d;
+import java.util.logging.Logger;
 
 /**
  * Basic triangular face used to form the hull.
@@ -34,6 +35,8 @@ import javax.vecmath.Vector3d;
  * @author John E. Lloyd, Fall 2004
  */
 public class Face {
+    private static final Logger LOGGER = Logger.getLogger(Face.class.getName());
+
     HalfEdge he0;
     private final Vector3d normal;
     double area;
@@ -66,7 +69,8 @@ public class Face {
         computeNormal(normal);
 
         if (area < minArea) {
-            IcyLogger.debug(this.getClass(), "area=" + area);
+            if (LOGGER.isLoggable(CustomLevel.DEBUG))
+                LOGGER.log(CustomLevel.DEBUG, "area=" + area);
             // make the normal more robust by removing
             // components parallel to the longest edge
 
