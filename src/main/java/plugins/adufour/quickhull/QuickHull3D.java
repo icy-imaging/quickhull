@@ -75,8 +75,8 @@ import java.util.logging.Logger;
  * As a convenience, there are also {@link #build(double[]) build} and
  * {@link #getVertices(double[]) getVertex} methods which pass point information using an array of
  * doubles.
- *
- * <h3><a href=distTol>Robustness </a></h3>
+ * <p>
+ * <b><a href=distTol>Robustness </a></b>
  * Because this algorithm uses floating point arithmetic, it is potentially vulnerable to errors
  * arising from numerical imprecision. We address this problem in the same way as <a
  * href=http://www.qhull.org>qhull</a>, by merging faces whose edges are not clearly convex. A face
@@ -95,8 +95,8 @@ import java.util.logging.Logger;
  * deemed correct if {@link #check check} returns <code>true</code>. These tests have been
  * successful for a large number of trials, and so we are confident that QuickHull3D is reasonably
  * robust.
- *
- * <h3>Merged Faces</h3>
+ * <p>
+ * <b>Merged Faces</b>
  * The merging of faces means that the faces returned by QuickHull3D may be convex polygons instead
  * of triangles. If triangles are desired, the application may {@link #triangulate triangulate} the
  * faces, but it should be noted that this may result in triangles which are very small or thin and
@@ -104,8 +104,8 @@ import java.util.logging.Logger;
  * face is likely to restore the numerical problems which the merging process removed. Hence, is it
  * possible that, after triangulation, {@link #check check} will fail (the same behavior is observed
  * with triangulated output from <a href=http://www.qhull.org>qhull</a>).
- *
- * <h3>Degenerate Input</h3>
+ * <p>
+ * <b>Degenerate Input</b>
  * It is assumed that the input points are non-degenerate in that they are not coincident, colinear,
  * or colplanar, and thus the convex hull has a non-zero volume. If the input points are detected to
  * be degenerate within the {@link #getDistanceTolerance() distance tolerance}, an
